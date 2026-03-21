@@ -7,6 +7,9 @@ public class Bow : MonoBehaviour
     public GameObject arrowPrefab;
     public Transform arrowSpawnPoint;
 
+    [Header("--- Camera ---")]
+    public Transform cameraHolder;
+
     [Header("--- StringBone ---")]
     public Transform stringBone;
     public Transform stringRestPoint;
@@ -103,10 +106,11 @@ public class Bow : MonoBehaviour
             Collider col = arrow.GetComponent<Collider>();
             if (col != null) col.enabled = true;
 
-            Vector3 dir = invertShoot ? arrowSpawnPoint.forward : -arrowSpawnPoint.forward;
-            rb.linearVelocity = dir * force;
+            Vector3 targetPoint = GetTargetPoint();
+            Vector3 dir = (targetPoint - arrowSpawnPoint.position).normalized;
 
-            arrow.transform.rotation = GetArrowRotation();
+            rb.linearVelocity = dir * force;
+            arrow.transform.rotation = Quaternion.LookRotation(dir) * Quaternion.Euler(-180f, -180f, 90f);
         }
         else
         {
@@ -140,9 +144,26 @@ public class Bow : MonoBehaviour
         );
     }
 
+    Vector3 GetTargetPoint()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(
+            new Vector3(Screen.width / 2f, Screen.height / 2f, 0f)
+        );
+
+        if (Physics.Raycast(ray, out RaycastHit hit, 500f))
+            return hit.point;
+
+        return ray.origin + ray.direction * 500f;
+    }
+
+    Vector3 GetShootDir()
+    {
+        return (GetTargetPoint() - arrowSpawnPoint.position).normalized;
+    }
+
     Quaternion GetArrowRotation()
     {
-        Vector3 dir = invertShoot ? arrowSpawnPoint.forward : -arrowSpawnPoint.forward;
-        return Quaternion.LookRotation(dir) * Quaternion.Euler(-180f, -180, 90);
+        Vector3 dir = GetShootDir();
+        return Quaternion.LookRotation(dir) * Quaternion.Euler(-180f, -180f, 90f);
     }
 }
