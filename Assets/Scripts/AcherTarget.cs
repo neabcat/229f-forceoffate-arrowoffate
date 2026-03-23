@@ -3,44 +3,39 @@ using UnityEngine;
 public class AcherTarget : MonoBehaviour
 {
     [SerializeField] float force;
-    [SerializeField] float mass;
     [SerializeField] float acceleration;
+
+    public GameObject weight;
 
     void CalculateForce()
     {
-        mass = GetComponent<Rigidbody>().mass;
-        acceleration = force / mass;
-        GetComponent<Rigidbody>().AddForce(force, force, 0);
+        Rigidbody rb = weight.GetComponent<Rigidbody>();
+        float  mass = rb.mass;
+        force = mass * acceleration ;
+        rb.AddForce(new Vector3 (0, force, force));
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Taget1"))
-        {
-            force = 250f;
-            CalculateForce();
-        }
-        else if (collision.gameObject.CompareTag("Target2"))
-        {
-            force = 300f;
-            CalculateForce();
-        }
-        else if (collision.gameObject.CompareTag("Target3"))
-        {
-            force = 350f;
-            CalculateForce();
-        }
-    }
+        Debug.Log("test");
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (gameObject.CompareTag("Taget1"))
+        {
+            acceleration = 300f;
+            CalculateForce();
+            Debug.Log("1");
+        }
+        else if (gameObject.CompareTag("Target2"))
+        {
+            acceleration = 400f;
+            CalculateForce();
+            Debug.Log("2");
+        }
+        else if (gameObject.CompareTag("Target3"))
+        {
+            acceleration = 500f;
+            CalculateForce();
+            Debug.Log("3");
+        }
     }
 }
