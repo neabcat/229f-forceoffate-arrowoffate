@@ -5,7 +5,6 @@ public class Bow : MonoBehaviour
 {
     [Header("--- Arrow ---")]
     public GameObject arrowPrefab;
-    public Transform arrowSpawnPoint;
 
     [Header("--- Camera ---")]
     public Transform cameraHolder;
@@ -14,9 +13,6 @@ public class Bow : MonoBehaviour
     public Transform stringBone;
     public Transform stringRestPoint;
     public Transform stringPullPoint;
-
-    [Header("--- Fix Direction ---")]
-    public bool invertShoot = false;
 
     [Header("--- Charge ---")]
     public float maxChargeTime = 2f;
@@ -32,7 +28,7 @@ public class Bow : MonoBehaviour
     private Vector3 stringVelocity = Vector3.zero;
     private GameObject nockArrow;
 
-    void Update()
+    void LateUpdate()
     {
         HandleInput();
         UpdateString();
@@ -62,7 +58,7 @@ public class Bow : MonoBehaviour
 
     void SpawnNockArrow()
     {
-        if (arrowPrefab == null || arrowSpawnPoint == null) return;
+        if (arrowPrefab == null || stringBone == null) return;
 
         nockArrow = Instantiate(arrowPrefab, stringBone.position, GetArrowRotation());
 
@@ -87,7 +83,7 @@ public class Bow : MonoBehaviour
 
     void Shoot()
     {
-        if (arrowPrefab == null || arrowSpawnPoint == null) return;
+        if (arrowPrefab == null || stringBone == null) return;
 
         float percent = Mathf.Clamp01(chargeTime / maxChargeTime);
         float force = Mathf.Lerp(minForce, maxForce, percent);
@@ -106,11 +102,9 @@ public class Bow : MonoBehaviour
             Collider col = arrow.GetComponent<Collider>();
             if (col != null) col.enabled = true;
 
-            Vector3 targetPoint = GetTargetPoint();
-            Vector3 dir = (targetPoint - arrowSpawnPoint.position).normalized;
-
+            Vector3 dir = GetShootDir();
             rb.linearVelocity = dir * force;
-            arrow.transform.rotation = Quaternion.LookRotation(dir) * Quaternion.Euler(-180f, -180f, 90f);
+            arrow.transform.rotation = cameraHolder.rotation * Quaternion.Euler(0f, 180f, -90f);
         }
         else
         {
@@ -120,8 +114,7 @@ public class Bow : MonoBehaviour
 
     void UpdateString()
     {
-        if (stringBone == null || stringRestPoint == null || stringPullPoint == null)
-            return;
+        if (stringBone == null || stringRestPoint == null || stringPullPoint == null) return;
 
         if (!isCharging && chargeTime > 0f)
         {
@@ -137,10 +130,7 @@ public class Bow : MonoBehaviour
         Vector3 targetPos = Vector3.Lerp(stringRestPoint.position, stringPullPoint.position, t);
 
         stringBone.position = Vector3.SmoothDamp(
-            stringBone.position,
-            targetPos,
-            ref stringVelocity,
-            0.04f
+            stringBone.position, targetPos, ref stringVelocity, 0.04f
         );
     }
 
@@ -158,12 +148,11 @@ public class Bow : MonoBehaviour
 
     Vector3 GetShootDir()
     {
-        return (GetTargetPoint() - arrowSpawnPoint.position).normalized;
+        return (GetTargetPoint() - stringBone.position).normalized;
     }
 
     Quaternion GetArrowRotation()
     {
-        Vector3 dir = GetShootDir();
-        return Quaternion.LookRotation(dir) * Quaternion.Euler(-180f, -180f, 90f);
+        return cameraHolder.rotation * Quaternion.Euler(180f, 180f, -90f);
     }
 }

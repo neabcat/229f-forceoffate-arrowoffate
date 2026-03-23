@@ -14,8 +14,7 @@ public class Arrow : MonoBehaviour
         if (rb == null) return;
         if (rb.linearVelocity.magnitude > 0.1f)
         {
-            transform.rotation = Quaternion.LookRotation(rb.linearVelocity.normalized)
-                               * Quaternion.Euler(-180f, 180f, 0);
+            transform.rotation = Quaternion.LookRotation(rb.linearVelocity.normalized, Vector3.up);
         }
     }
 }
