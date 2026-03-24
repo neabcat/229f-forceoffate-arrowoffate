@@ -358,7 +358,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bow
   arrowPrefab: {fileID: 5804468491343200978, guid: 726026af80b934a4dbc124cad1cc72ff, type: 3}
-  cameraHolder: {fileID: 0}
+  cameraHolder: {fileID: 970809007896117426}
   stringBone: {fileID: 4863298646232063038}
   stringRestPoint: {fileID: 4634824045497169056}
   stringPullPoint: {fileID: 8209785944314468216}
@@ -378,7 +378,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f72ed4082117da6499ca27dbad448e87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BowAim
-  cameraHolder: {fileID: 0}
+  cameraHolder: {fileID: 970809007896117426}
   positionOffset: {x: 2, y: 0, z: 3}
   rotationOffset: {x: 0, y: 0, z: 0}
 --- !u!1001 &7614801736795310203
@@ -403,31 +403,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4b2da5a835a8f5340b839425455bba56, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 198.09682
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4b2da5a835a8f5340b839425455bba56, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 42.57
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4b2da5a835a8f5340b839425455bba56, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5
+      value: 245.54738
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4b2da5a835a8f5340b839425455bba56, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.689712
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4b2da5a835a8f5340b839425455bba56, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4b2da5a835a8f5340b839425455bba56, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.72408384
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4b2da5a835a8f5340b839425455bba56, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4b2da5a835a8f5340b839425455bba56, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -435,7 +435,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4b2da5a835a8f5340b839425455bba56, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 92.785
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4b2da5a835a8f5340b839425455bba56, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -503,7 +503,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!65 &3084763224985639508
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -537,9 +537,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 563b4362487f358489002fecbc0bb666, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
-  moveSpeed: 5
-  sprintSpeed: 9
-  jumpForce: 5
+  moveSpeed: 15
+  sprintSpeed: 25
+  jumpForce: 15
   cameraHolder: {fileID: 970809007896117426}
   mouseSensitivity: 2
   maxLookAngle: 80
