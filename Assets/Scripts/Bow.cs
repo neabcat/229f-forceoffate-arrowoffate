@@ -99,16 +99,14 @@ public class Bow : MonoBehaviour
             rb.isKinematic = false;
             rb.useGravity = true;
 
-            Collider col = arrow.GetComponent<Collider>();
-            if (col != null) col.enabled = true;
-
             Vector3 dir = GetShootDir();
             rb.linearVelocity = dir * force;
             arrow.transform.rotation = cameraHolder.rotation * Quaternion.Euler(0f, 180f, -90f);
-        }
-        else
-        {
-            Debug.LogWarning("❌ Arrow prefab no Rigidbody");
+
+            // หน่วง enable Collider ให้ Arrow บินออกไปก่อน
+            Arrow arrowScript = arrow.GetComponent<Arrow>();
+            if (arrowScript != null)
+                arrowScript.EnableColliderDelayed(0.1f);
         }
     }
 
