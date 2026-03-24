@@ -238,6 +238,19 @@ ConstantForce:
   m_RelativeForce: {x: 0, y: 0, z: 0}
   m_Torque: {x: 0, y: 0, z: 0}
   m_RelativeTorque: {x: 0, y: 0, z: 0}
+--- !u!114 &83905552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 83905546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a3b77adba3f6424283c2f909930f3db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Ghost
+  detectionRadius: 10
 --- !u!4 &201057685 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 970809007896117426, guid: c78aad0ffbb45a54e99fcc0317e5f7d8, type: 3}
@@ -961,7 +974,7 @@ Transform:
   m_GameObject: {fileID: 958594404}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 304.2, y: 5.5, z: 226.8}
+  m_LocalPosition: {x: 304.2, y: -4.5, z: 226.8}
   m_LocalScale: {x: 14.123291, y: 67.53627, z: 33.27124}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1716,7 +1729,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5446477390807014375, guid: b713585f24f940f4eadb10319818ef40, type: 3}
       propertyPath: m_Constraints
-      value: 112
+      value: 118
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1725,6 +1738,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5446477390807014373, guid: b713585f24f940f4eadb10319818ef40, type: 3}
       insertIndex: -1
       addedObject: {fileID: 83905551}
+    - targetCorrespondingSourceObject: {fileID: 5446477390807014373, guid: b713585f24f940f4eadb10319818ef40, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 83905552}
   m_SourcePrefab: {fileID: 100100000, guid: b713585f24f940f4eadb10319818ef40, type: 3}
 --- !u!1001 &1867391941
 PrefabInstance:
@@ -1938,6 +1954,73 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1710826426278415097, guid: 76f538fcfff666d4894fa169e7c14328, type: 3}
   m_PrefabInstance: {fileID: 2113446392}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2142326245
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2142326248}
+  - component: {fileID: 2142326247}
+  - component: {fileID: 2142326246}
+  m_Layer: 0
+  m_Name: Collider_for_wayup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2142326246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2142326245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df95df17b9ce6e844bf115238a6b865b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WayUp
+  targetObject: {fileID: 958594404}
+--- !u!65 &2142326247
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2142326245}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 214.0408, y: 417.52844, z: 75.83132}
+  m_Center: {x: 8.315384, y: -70.33588, z: -8.813259}
+--- !u!4 &2142326248
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2142326245}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 357.21957, y: 14.37263, z: 110.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1953,3 +2036,4 @@ SceneRoots:
   - {fileID: 2214206}
   - {fileID: 639651779}
   - {fileID: 1767141066}
+  - {fileID: 2142326248}

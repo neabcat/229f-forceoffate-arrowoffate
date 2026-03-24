@@ -28,7 +28,7 @@ public class Bow : MonoBehaviour
     private Vector3 stringVelocity = Vector3.zero;
     private GameObject nockArrow;
 
-    void LateUpdate()
+    void Update()
     {
         HandleInput();
         UpdateString();
