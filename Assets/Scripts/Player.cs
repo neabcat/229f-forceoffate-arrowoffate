@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
 
     [Header("Jump")]
     public float jumpForce = 5f;
-    public float fallMultiplier = 3f;
+    public float gravityScale = 2.5f;
 
     [Header("Mouse Look")]
     public Transform cameraHolder;
@@ -39,7 +39,19 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        // Mouse Look
+        HandleMouseLook();
+        HandleJump();
+    }
+
+    void FixedUpdate()
+    {
+        HandleMovement();
+        ApplyGravity();
+    }
+
+
+    void HandleMouseLook()
+    {
         Vector2 mouseDelta = Mouse.current.delta.ReadValue();
 
         transform.Rotate(Vector3.up * mouseDelta.x * mouseSensitivity * Time.deltaTime * 100f);
@@ -48,8 +60,10 @@ public class Player : MonoBehaviour
         xRotation = Mathf.Clamp(xRotation, -maxLookAngle, maxLookAngle);
 
         cameraHolder.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+    }
 
-        // Jump
+    void HandleJump()
+    {
         if (jumpAction.WasPressedThisFrame() && isGrounded)
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
@@ -57,9 +71,8 @@ public class Player : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
+    void HandleMovement()
     {
-        // Movement
         Vector2 input = moveAction.ReadValue<Vector2>();
         bool sprinting = sprintAction.IsPressed();
         float speed = sprinting ? sprintSpeed : moveSpeed;
@@ -69,12 +82,11 @@ public class Player : MonoBehaviour
         targetVelocity.y = rb.linearVelocity.y;
 
         rb.linearVelocity = targetVelocity;
+    }
 
-        // ตกเร็วขึ้นอย่างเดียว (ไม่สนกดค้าง)
-        if (rb.linearVelocity.y < 0)
-        {
-            rb.linearVelocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime;
-        }
+    void ApplyGravity()
+    {
+        rb.linearVelocity += Physics.gravity * (gravityScale - 1f) * Time.fixedDeltaTime;
     }
 
     void OnCollisionStay(Collision collision)

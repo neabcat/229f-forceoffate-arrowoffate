@@ -36,12 +36,12 @@ public class Bow : MonoBehaviour
 
     void Update()
     {
-        HandleInput();
     }
 
     void LateUpdate()
     {
-        UpdateString(); // 🔥 ย้ายมานี่ให้ sync กับ camera
+        HandleInput();
+        UpdateString(); 
         UpdateNockArrow();
     }
 
@@ -79,6 +79,12 @@ public class Bow : MonoBehaviour
             rb.useGravity = false;
         }
 
+        // ส่ง Bow collider ไปให้ Arrow ignore
+        Collider bowCol = GetComponent<Collider>();
+        Arrow arrowScript = nockArrow.GetComponent<Arrow>();
+        if (bowCol != null && arrowScript != null)
+            arrowScript.SetBowCollider(bowCol);
+
         Collider col = nockArrow.GetComponent<Collider>();
         if (col != null) col.enabled = false;
     }
@@ -108,6 +114,11 @@ public class Bow : MonoBehaviour
             Vector3 dir = GetShootDir();
             rb.linearVelocity = dir * force;
         }
+
+        // หน่วง 0.1 วิก่อนเปิด Collider ให้ธนูพ้น Bow ก่อน
+        Arrow arrowScript = arrow.GetComponent<Arrow>();
+        if (arrowScript != null)
+            arrowScript.EnableColliderDelayed(0.1f);
     }
 
     void UpdateString()
