@@ -25,13 +25,23 @@ public class Bow : MonoBehaviour
     private float chargeTime = 0f;
     private bool isCharging = false;
     private bool hasFired = false;
-    private Vector3 stringVelocity = Vector3.zero;
     private GameObject nockArrow;
+
+    private Camera cam; // 🔥 cache camera
+
+    void Awake()
+    {
+        cam = Camera.main;
+    }
 
     void Update()
     {
         HandleInput();
-        UpdateString();
+    }
+
+    void LateUpdate()
+    {
+        UpdateString(); // 🔥 ย้ายมานี่ให้ sync กับ camera
         UpdateNockArrow();
     }
 
@@ -83,14 +93,10 @@ public class Bow : MonoBehaviour
 
     void Shoot()
     {
-        if (arrowPrefab == null || stringBone == null) return;
-
         float percent = Mathf.Clamp01(chargeTime / maxChargeTime);
         float force = Mathf.Lerp(minForce, maxForce, percent);
 
-        GameObject arrow = nockArrow != null
-            ? nockArrow
-            : Instantiate(arrowPrefab, stringBone.position, GetArrowRotation());
+        GameObject arrow = nockArrow;
         nockArrow = null;
 
         Rigidbody rb = arrow.GetComponent<Rigidbody>();
@@ -101,18 +107,12 @@ public class Bow : MonoBehaviour
 
             Vector3 dir = GetShootDir();
             rb.linearVelocity = dir * force;
-            arrow.transform.rotation = cameraHolder.rotation * Quaternion.Euler(0f, 180f, -90f);
-
-            // หน่วง enable Collider ให้ Arrow บินออกไปก่อน
-            Arrow arrowScript = arrow.GetComponent<Arrow>();
-            if (arrowScript != null)
-                arrowScript.EnableColliderDelayed(0.1f);
         }
     }
 
     void UpdateString()
     {
-        if (stringBone == null || stringRestPoint == null || stringPullPoint == null) return;
+        if (stringBone == null) return;
 
         if (!isCharging && chargeTime > 0f)
         {
@@ -127,14 +127,17 @@ public class Bow : MonoBehaviour
         float t = Mathf.Clamp01(chargeTime / maxChargeTime);
         Vector3 targetPos = Vector3.Lerp(stringRestPoint.position, stringPullPoint.position, t);
 
-        stringBone.position = Vector3.SmoothDamp(
-            stringBone.position, targetPos, ref stringVelocity, 0.04f
+        // 🔥 เปลี่ยน SmoothDamp → Lerp (ลื่นกว่า)
+        stringBone.position = Vector3.Lerp(
+            stringBone.position,
+            targetPos,
+            15f * Time.deltaTime
         );
     }
 
     Vector3 GetTargetPoint()
     {
-        Ray ray = Camera.main.ScreenPointToRay(
+        Ray ray = cam.ScreenPointToRay(
             new Vector3(Screen.width / 2f, Screen.height / 2f, 0f)
         );
 

@@ -3,9 +3,15 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
+    [Header("Movement")]
     public float moveSpeed = 5f;
     public float sprintSpeed = 9f;
+
+    [Header("Jump")]
     public float jumpForce = 5f;
+    public float fallMultiplier = 3f;
+
+    [Header("Mouse Look")]
     public Transform cameraHolder;
     public float mouseSensitivity = 2f;
     public float maxLookAngle = 80f;
@@ -13,6 +19,7 @@ public class Player : MonoBehaviour
     private Rigidbody rb;
     private float xRotation = 0f;
     private bool isGrounded = false;
+
     private InputAction moveAction;
     private InputAction jumpAction;
     private InputAction sprintAction;
@@ -21,8 +28,10 @@ public class Player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
         moveAction = InputSystem.actions.FindAction("Move");
         jumpAction = InputSystem.actions.FindAction("Jump");
         sprintAction = InputSystem.actions.FindAction("Sprint");
@@ -30,11 +39,14 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        // Look
+        // Mouse Look
         Vector2 mouseDelta = Mouse.current.delta.ReadValue();
+
         transform.Rotate(Vector3.up * mouseDelta.x * mouseSensitivity * Time.deltaTime * 100f);
+
         xRotation -= mouseDelta.y * mouseSensitivity * Time.deltaTime * 100f;
         xRotation = Mathf.Clamp(xRotation, -maxLookAngle, maxLookAngle);
+
         cameraHolder.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
 
         // Jump
@@ -47,21 +59,38 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Move
+        // Movement
         Vector2 input = moveAction.ReadValue<Vector2>();
         bool sprinting = sprintAction.IsPressed();
         float speed = sprinting ? sprintSpeed : moveSpeed;
+
         Vector3 moveDir = (transform.right * input.x + transform.forward * input.y).normalized;
         Vector3 targetVelocity = moveDir * speed;
         targetVelocity.y = rb.linearVelocity.y;
+
         rb.linearVelocity = targetVelocity;
+
+        // ตกเร็วขึ้นอย่างเดียว (ไม่สนกดค้าง)
+        if (rb.linearVelocity.y < 0)
+        {
+            rb.linearVelocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime;
+        }
     }
 
     void OnCollisionStay(Collision collision)
     {
         foreach (ContactPoint contact in collision.contacts)
-            if (contact.normal.y > 0.5f) { isGrounded = true; return; }
+        {
+            if (contact.normal.y > 0.5f)
+            {
+                isGrounded = true;
+                return;
+            }
+        }
     }
 
-    void OnCollisionExit(Collision collision) => isGrounded = false;
+    void OnCollisionExit(Collision collision)
+    {
+        isGrounded = false;
+    }
 }
