@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TargetSwitch : MonoBehaviour
 {
@@ -17,7 +18,20 @@ public class TargetSwitch : MonoBehaviour
             floorRenderer.material = newVisualMaterial;
             Destroy(cube.gameObject);
         }
-        
     }
-   
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R)) 
+        {
+            ResetScene();
+        }
+    }
+
+    public void ResetScene()
+    {
+        Scene currentScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentScene.name);
+    }
+
 }
