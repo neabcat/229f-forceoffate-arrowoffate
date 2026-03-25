@@ -7,6 +7,8 @@ TagManager:
   - Taget1
   - Target2
   - Target3
+  - Ground
+  - Swicth
   layers:
   - Default
   - TransparentFX
