@@ -59,7 +59,7 @@ public class AcherTarget : MonoBehaviour
             Rigidbody rb = rock.GetComponent<Rigidbody>();
             rb.AddForce(Vector3.down * force);
 
-            Invoke("StopRock", 5f);
+            Invoke("StopRock", 15f);
         }
         
     }

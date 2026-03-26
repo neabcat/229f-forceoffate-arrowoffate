@@ -8,6 +8,8 @@ public class TargetSwitch : MonoBehaviour
     public Material newVisualMaterial;
     public PhysicsMaterial newPhysicMaterial;
     public GameObject cube;
+    public GameObject way;
+    public Player Player;
 
 
     void OnCollisionEnter(Collision collision)
@@ -17,6 +19,18 @@ public class TargetSwitch : MonoBehaviour
             floorCollider.sharedMaterial = newPhysicMaterial;
             floorRenderer.material = newVisualMaterial;
             Destroy(cube.gameObject);
+        }
+
+        if (collision.gameObject.CompareTag("Taget1"))
+        {
+            floorCollider.sharedMaterial = newPhysicMaterial;
+            floorRenderer.material = newVisualMaterial;
+        }
+
+        if ((collision.gameObject.CompareTag("Target2")))
+        {
+            floorCollider.sharedMaterial = newPhysicMaterial;
+            floorRenderer.material = newVisualMaterial;
         }
     }
 
