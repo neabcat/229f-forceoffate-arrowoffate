@@ -8,8 +8,7 @@ public class TargetSwitch : MonoBehaviour
     public Material newVisualMaterial;
     public PhysicsMaterial newPhysicMaterial;
     public GameObject cube;
-    public GameObject way;
-    public Player Player;
+
 
 
     void OnCollisionEnter(Collision collision)
