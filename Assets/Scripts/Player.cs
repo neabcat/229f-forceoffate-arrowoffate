@@ -24,6 +24,9 @@ public class Player : MonoBehaviour
     private InputAction jumpAction;
     private InputAction sprintAction;
 
+    private bool isDead = false;
+
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -39,12 +42,14 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        if (isDead) return;
         HandleMouseLook();
         HandleJump();
     }
 
     void FixedUpdate()
     {
+        if (isDead) return;
         HandleMovement();
         ApplyGravity();
     }
@@ -104,5 +109,21 @@ public class Player : MonoBehaviour
     void OnCollisionExit(Collision collision)
     {
         isGrounded = false;
+    }
+
+    public void Die()
+    {
+        if (isDead) return; // ป้องกันการ Die ซ้ำ
+
+        isDead = true;
+        Debug.Log("Player Died!");
+
+        // ล็อค input ไม่ให้ขยับได้หลังตาย
+        rb.linearVelocity = Vector3.zero;
+
+        // TODO: trigger Death UI ในอนาคต
+        // TODO: reload scene หรือ game over screen
+
+        gameObject.SetActive(false);
     }
 }
