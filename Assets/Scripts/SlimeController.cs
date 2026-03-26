@@ -2,67 +2,137 @@
 
 public class SlimeController : MonoBehaviour
 {
+    [Header("HP")]
+    public int maxHP = 3;
+    private int currentHP;
+
+    [Header("Movement")]
     public float moveSpeed = 2f;
     public float changeDirectionTime = 3f;
 
+    [Header("Chase")]
+    public float chaseSpeed = 5f;
+    public float detectionRange = 20f;
+    private Transform player;
+
     [Header("Bounce")]
-    public float bounceHeight = 1.7f;
+    public Transform model; // ใส่ child model ตรงนี้
+    public float bounceHeight = 0.3f;
     public float bounceSpeed = 6f;
 
-    [Header("Rotation Offset")]
+    [Header("Rotation")]
+    public float rotateSpeed = 8f;
     public Vector3 rotationOffset = new Vector3(0, -90f, 0);
 
     private Rigidbody rb;
     private Vector3 moveDir;
+    private Vector3 smoothDir;
     private float timer;
 
-    private float baseY;
     private float bounceTimer;
+    private bool isChasing = false;
+
+    void Awake()
+    {
+        GameObject p = GameObject.FindGameObjectWithTag("Player");
+        if (p != null)
+            player = p.transform;
+    }
 
     void Start()
     {
+        currentHP = maxHP;
+
         rb = GetComponent<Rigidbody>();
-
-        if (rb != null)
-        {
-            rb.constraints = RigidbodyConstraints.FreezeRotation;
-            rb.useGravity = false; // 🔥 สำคัญ
-        }
-
-        baseY = transform.position.y;
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
+        rb.useGravity = true; // เปิด gravity แล้ว
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
 
         PickRandomDirection();
+        smoothDir = moveDir;
     }
 
     void FixedUpdate()
     {
+        // detect player
+        if (player != null)
+        {
+            Vector3 flatPlayer = player.position;
+            flatPlayer.y = transform.position.y;
+
+            float dist = Vector3.Distance(transform.position, flatPlayer);
+            isChasing = dist <= detectionRange;
+        }
+
         timer += Time.fixedDeltaTime;
 
-        if (timer >= changeDirectionTime)
+        if (!isChasing && timer >= changeDirectionTime)
         {
             PickRandomDirection();
             timer = 0f;
         }
 
-        // 🔥 เด้งแกน Y
-        bounceTimer += Time.fixedDeltaTime * bounceSpeed;
-        float bounceY = Mathf.Sin(bounceTimer) * bounceHeight;
+        Vector3 targetDir;
+        float speed;
 
-        // 🔥 เดิน
-        Vector3 move = moveDir * moveSpeed * Time.fixedDeltaTime;
-        Vector3 nextPos = rb.position + move;
-
-        // ใส่ Y เด้งเข้าไป
-        nextPos.y = baseY + bounceY;
-
-        rb.MovePosition(nextPos);
-
-        // 🔥 หมุน (หน้า -X)
-        if (moveDir != Vector3.zero)
+        if (isChasing && player != null)
         {
-            Quaternion rot = Quaternion.LookRotation(-moveDir);
-            transform.rotation = rot * Quaternion.Euler(rotationOffset);
+            targetDir = player.position - transform.position;
+            targetDir.y = 0f;
+            targetDir.Normalize();
+            speed = chaseSpeed;
         }
+        else
+        {
+            targetDir = moveDir;
+            speed = moveSpeed;
+        }
+
+        // smooth movement
+        smoothDir = Vector3.Lerp(smoothDir, targetDir, 6f * Time.fixedDeltaTime);
+
+        Vector3 velocity = smoothDir * speed;
+        velocity.y = rb.linearVelocity.y; // เก็บ gravity ไว้
+        rb.linearVelocity = velocity;
+
+        // bounce เฉพาะ model
+        if (model != null)
+        {
+            bounceTimer += Time.fixedDeltaTime * bounceSpeed;
+            float bounceY = Mathf.Sin(bounceTimer) * bounceHeight;
+
+            Vector3 local = model.localPosition;
+            local.y = bounceY;
+            model.localPosition = local;
+        }
+
+        // rotate smooth
+        if (smoothDir != Vector3.zero)
+        {
+            Quaternion targetRot =
+                Quaternion.LookRotation(-smoothDir) *
+                Quaternion.Euler(rotationOffset);
+
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                targetRot,
+                rotateSpeed * Time.fixedDeltaTime
+            );
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        currentHP -= damage;
+        Debug.Log("Slime HP: " + currentHP);
+
+        if (currentHP <= 0)
+            Die();
+    }
+
+    void Die()
+    {
+        Destroy(gameObject);
     }
 
     void PickRandomDirection()
@@ -76,11 +146,15 @@ public class SlimeController : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        if (!col.gameObject.CompareTag("Player"))
+        if (col.gameObject.CompareTag("Player"))
         {
-            // 🔥 ชน → เปลี่ยนทิศทันที
-            PickRandomDirection();
-            timer = 0f;
+            Player p = col.gameObject.GetComponent<Player>();
+            if (p != null)
+                p.Die();
+            return;
         }
+
+        PickRandomDirection();
+        timer = 0f;
     }
 }
