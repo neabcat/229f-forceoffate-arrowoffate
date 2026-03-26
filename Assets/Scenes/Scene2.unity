@@ -3786,18 +3786,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 517113385696528974, guid: c78aad0ffbb45a54e99fcc0317e5f7d8, type: 3}
-      propertyPath: followSpeed
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 517113385696528974, guid: c78aad0ffbb45a54e99fcc0317e5f7d8, type: 3}
-      propertyPath: cameraHolder
-      value: 
-      objectReference: {fileID: 959509642}
-    - target: {fileID: 5234687562431575281, guid: c78aad0ffbb45a54e99fcc0317e5f7d8, type: 3}
-      propertyPath: cameraHolder
-      value: 
-      objectReference: {fileID: 959509642}
     - target: {fileID: 7308317468785341738, guid: c78aad0ffbb45a54e99fcc0317e5f7d8, type: 3}
       propertyPath: m_Name
       value: Player
