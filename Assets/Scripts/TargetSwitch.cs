@@ -39,6 +39,7 @@ public class TargetSwitch : MonoBehaviour
         {
             ResetScene();
         }
+
     }
 
     public void ResetScene()
