@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class AcherTarget : MonoBehaviour
 {
-    [SerializeField] float force;
-    [SerializeField] float acceleration;
+    float force;
+    float acceleration;
+    [SerializeField] float forceSpin;
 
     public GameObject weight;
 
@@ -21,21 +22,21 @@ public class AcherTarget : MonoBehaviour
 
         if (gameObject.CompareTag("Taget1"))
         {
-            acceleration = 300f;
-            CalculateForce();
+            weight.GetComponent<Renderer>().material.color = Color.blue;
             Debug.Log("1");
         }
         else if (gameObject.CompareTag("Target2"))
         {
-            acceleration = 400f;
-            CalculateForce();
+            Rigidbody rb = weight.GetComponent<Rigidbody>();
+            rb.AddTorque(Vector3.up * forceSpin);
             Debug.Log("2");
         }
         else if (gameObject.CompareTag("Target3"))
         {
-            acceleration = 500f;
+            acceleration = 600f;
             CalculateForce();
             Debug.Log("3");
         }
     }
+
 }
