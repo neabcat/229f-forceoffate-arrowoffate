@@ -7,6 +7,7 @@ public class AcherTarget : MonoBehaviour
     [SerializeField] float forceSpin;
 
     public GameObject weight;
+    public GameObject Wall;
 
     void CalculateForce()
     {
@@ -35,6 +36,8 @@ public class AcherTarget : MonoBehaviour
         {
             acceleration = 600f;
             CalculateForce();
+
+            Destroy(Wall.gameObject, 10f);
             Debug.Log("3");
         }
     }
