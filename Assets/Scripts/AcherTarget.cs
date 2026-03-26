@@ -10,9 +10,9 @@ public class AcherTarget : MonoBehaviour
     void CalculateForce()
     {
         Rigidbody rb = weight.GetComponent<Rigidbody>();
-        float  mass = rb.mass;
-        force = mass * acceleration ;
-        rb.AddForce(new Vector3 (0, force, force));
+        float mass = rb.mass;
+        force = mass * acceleration;
+        rb.AddForce(new Vector3(0, force, force));
     }
 
     private void OnCollisionEnter(Collision collision)
