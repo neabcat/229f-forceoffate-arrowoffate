@@ -4,6 +4,8 @@ using UnityEngine.SceneManagement;
 public class DeathMenuUI : MonoBehaviour
 {
     public GameObject deathMenu;
+    public SceneFader fader;
+    public string mainMenuScene = "MainMenu";
 
     void Start()
     {
@@ -17,17 +19,18 @@ public class DeathMenuUI : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        Time.timeScale = 0f; // pause à¡Á
+        Time.timeScale = 0f;
     }
 
     public void Retry()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        fader.FadeToSceneByName(SceneManager.GetActiveScene().name);
     }
 
-    public void Quit()
+    public void QuitToMenu()
     {
-        Application.Quit();
+        Time.timeScale = 1f;
+        fader.FadeToSceneByName(mainMenuScene);
     }
 }
