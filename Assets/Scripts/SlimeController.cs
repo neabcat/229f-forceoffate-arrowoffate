@@ -2,196 +2,160 @@
 
 public class SlimeController : MonoBehaviour
 {
-    public enum SlimeState { Patrol, Chase }
+    [Header("HP")]
+    public int maxHP = 3;
+    private int currentHP;
 
-    [Header("Patrol")]
-    public BoxCollider patrolArea;
-    public float patrolSpeed = 3f;
-    public float patrolWaitTime = 1f;
+    [Header("Movement")]
+    public float moveSpeed = 2f;
+    public float changeDirectionTime = 3f;
 
     [Header("Chase")]
     public float chaseSpeed = 5f;
-    public float detectionRange = 8f;
+    public float detectionRange = 20f;
+    private Transform player;
 
     [Header("Bounce")]
-    public float bounceHeight = 0.8f;   // ความสูงเด้ง
-    public float bounceSpeed = 6f;      // ความเร็วเด้ง
+    public Transform model;
+    public float bounceHeight = 0.25f;
+    public float bounceSpeed = 6f;
 
-    [Header("References")]
-    public Transform player;
-
-    private SlimeState currentState = SlimeState.Patrol;
-    private Vector3 targetPoint;
-    private float waitTimer = 0f;
-    private bool isWaiting = false;
+    [Header("Rotation")]
+    public float rotateSpeed = 8f;
+    public Vector3 rotationOffset = new Vector3(0, -90f, 0);
 
     private Rigidbody rb;
-    private Animator anim;
+    private Vector3 moveDir;
+    private Vector3 smoothDir;
+    private float timer;
 
-    private float baseY;
-    private float bounceTimer = 0f;
+    private float bounceTimer;
+    private bool isChasing = false;
+
+    void Awake()
+    {
+        GameObject p = GameObject.FindGameObjectWithTag("Player");
+        if (p != null)
+            player = p.transform;
+    }
 
     void Start()
     {
+        currentHP = maxHP;
+
         rb = GetComponent<Rigidbody>();
-        anim = GetComponent<Animator>();
 
-        // ล็อคแค่การหมุน
-        if (rb != null)
-        {
-            rb.constraints = RigidbodyConstraints.FreezeRotation;
-        }
+        rb.useGravity = true;
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
 
-        // เก็บตำแหน่ง Y เริ่มต้น
-        baseY = transform.position.y;
-
-        // หา player อัตโนมัติ
-        if (player == null)
-        {
-            GameObject playerObj = GameObject.FindWithTag("Player");
-            if (playerObj != null)
-                player = playerObj.transform;
-        }
-
-        SetNewRandomTarget();
+        PickRandomDirection();
+        smoothDir = moveDir;
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        if (player == null) return;
-
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-
-        switch (currentState)
+        // detect player
+        if (player != null)
         {
-            case SlimeState.Patrol:
-                HandlePatrol();
+            Vector3 flatPlayer = player.position;
+            flatPlayer.y = transform.position.y;
 
-                if (distanceToPlayer <= detectionRange)
-                {
-                    currentState = SlimeState.Chase;
-                    isWaiting = false;
-                }
-                break;
-
-            case SlimeState.Chase:
-                HandleChase();
-
-                if (distanceToPlayer > detectionRange * 1.5f)
-                {
-                    currentState = SlimeState.Patrol;
-                    SetNewRandomTarget();
-                }
-                break;
-        }
-    }
-
-    void HandlePatrol()
-    {
-        if (isWaiting)
-        {
-            waitTimer -= Time.deltaTime;
-
-            if (waitTimer <= 0f)
-            {
-                isWaiting = false;
-                SetNewRandomTarget();
-            }
-
-            SetAnimation(false);
-            return;
+            float dist = Vector3.Distance(transform.position, flatPlayer);
+            isChasing = dist <= detectionRange;
         }
 
-        MoveTowards(targetPoint, patrolSpeed);
+        timer += Time.fixedDeltaTime;
 
-        if (Vector3.Distance(transform.position, targetPoint) < 0.5f)
+        if (!isChasing && timer >= changeDirectionTime)
         {
-            isWaiting = true;
-            waitTimer = patrolWaitTime;
-        }
-    }
-
-    void HandleChase()
-    {
-        MoveTowards(player.position, chaseSpeed);
-    }
-
-    void MoveTowards(Vector3 target, float speed)
-    {
-        Vector3 dir = (target - transform.position);
-        dir.y = 0f;
-
-        if (dir.magnitude < 0.1f)
-        {
-            SetAnimation(false);
-            return;
+            PickRandomDirection();
+            timer = 0f;
         }
 
-        dir.Normalize();
+        Vector3 targetDir;
+        float speed;
 
-        // 🔥 หมุนก่อน
-        Quaternion targetRot = Quaternion.LookRotation(dir);
-        targetRot *= Quaternion.Euler(0, -90f, 0); // แปลง Z → -X
-
-        transform.rotation = Quaternion.Slerp(
-            transform.rotation,
-            targetRot,
-            8f * Time.deltaTime
-        );
-
-        // 🔥 ใช้ "forward ของโมเดลจริง"
-        Vector3 move = -transform.right * speed * Time.deltaTime;
-
-        // เด้ง
-        bounceTimer += Time.deltaTime * bounceSpeed;
-        float bounceY = Mathf.Abs(Mathf.Sin(bounceTimer)) * bounceHeight;
-
-        Vector3 newPos = transform.position + move;
-        newPos.y = baseY + bounceY;
-
-        if (rb != null)
-            rb.MovePosition(newPos);
+        if (isChasing && player != null)
+        {
+            targetDir = player.position - transform.position;
+            targetDir.y = 0f;
+            targetDir.Normalize();
+            speed = chaseSpeed;
+        }
         else
-            transform.position = newPos;
-
-        SetAnimation(true);
-    }
-
-    void SetAnimation(bool isMoving)
-    {
-        if (anim != null)
-            anim.SetBool("isMoving", isMoving);
-    }
-
-    void SetNewRandomTarget()
-    {
-        if (patrolArea == null) return;
-
-        Bounds bounds = patrolArea.bounds;
-
-        targetPoint = new Vector3(
-            Random.Range(bounds.min.x, bounds.max.x),
-            baseY,
-            Random.Range(bounds.min.z, bounds.max.z)
-        );
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
         {
-            Player playerScript = other.GetComponent<Player>();
-            if (playerScript != null)
-                playerScript.Die();
+            targetDir = moveDir;
+            speed = moveSpeed;
+        }
+
+        // smooth direction
+        smoothDir = Vector3.Lerp(smoothDir, targetDir, 6f * Time.fixedDeltaTime);
+
+        // เดินตามพื้นจริง
+        Vector3 velocity = smoothDir * speed;
+        velocity.y = rb.linearVelocity.y;
+        rb.linearVelocity = velocity;
+
+        // bounce เฉพาะ model
+        if (model != null)
+        {
+            bounceTimer += Time.fixedDeltaTime * bounceSpeed;
+            float bounceY = Mathf.Sin(bounceTimer) * bounceHeight;
+
+            Vector3 local = model.localPosition;
+            local.y = bounceY;
+            model.localPosition = local;
+        }
+
+        // rotate smooth
+        if (smoothDir != Vector3.zero)
+        {
+            Quaternion targetRot =
+                Quaternion.LookRotation(-smoothDir) *
+                Quaternion.Euler(rotationOffset);
+
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                targetRot,
+                rotateSpeed * Time.fixedDeltaTime
+            );
         }
     }
 
-    void OnDrawGizmosSelected()
+    public void TakeDamage(int damage)
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
+        currentHP -= damage;
 
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, detectionRange * 1.5f);
+        if (currentHP <= 0)
+            Die();
     }
-}
+
+    void Die()
+    {
+        Destroy(gameObject);
+    }
+
+    void PickRandomDirection()
+    {
+        moveDir = new Vector3(
+            Random.Range(-1f, 1f),
+            0,
+            Random.Range(-1f, 1f)
+        ).normalized;
+    }
+
+    void OnCollisionEnter(Collision col)
+    {
+        if (col.gameObject.CompareTag("Player"))
+        {
+            Player p = col.gameObject.GetComponent<Player>();
+            if (p != null)
+                p.Die();
+            return;
+        }
+
+        PickRandomDirection();
+        timer = 0f;
+    }
+}   

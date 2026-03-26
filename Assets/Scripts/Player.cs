@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
     private InputAction jumpAction;
     private InputAction sprintAction;
 
+    public DeathMenuUI deathMenu;
     private bool isDead = false;
 
 
@@ -113,16 +114,15 @@ public class Player : MonoBehaviour
 
     public void Die()
     {
-        if (isDead) return; // ป้องกันการ Die ซ้ำ
+        if (isDead) return;
 
         isDead = true;
         Debug.Log("Player Died!");
 
-        // ล็อค input ไม่ให้ขยับได้หลังตาย
         rb.linearVelocity = Vector3.zero;
 
-        // TODO: trigger Death UI ในอนาคต
-        // TODO: reload scene หรือ game over screen
+        if (deathMenu != null)
+            deathMenu.Show();
 
         gameObject.SetActive(false);
     }

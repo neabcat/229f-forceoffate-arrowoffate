@@ -6,6 +6,7 @@ public class Arrow : MonoBehaviour
     private Rigidbody rb;
     private bool hasHit = false;
     [SerializeField] private Collider bowCollider;
+    [SerializeField] private int damage = 1;
 
     void Start()
     {
@@ -29,6 +30,13 @@ public class Arrow : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         if (hasHit) return;
+
+        // ยิง Slime
+        SlimeController slime = collision.gameObject.GetComponent<SlimeController>();
+        if (slime != null)
+        {
+            slime.TakeDamage(damage);
+        }
 
         // เช็ค Ghost ก่อนเสมอ
         Ghost ghost = collision.gameObject.GetComponent<Ghost>();
