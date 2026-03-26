@@ -16,8 +16,8 @@ public class SlimeController : MonoBehaviour
     private Transform player;
 
     [Header("Bounce")]
-    public Transform model; // ใส่ child model ตรงนี้
-    public float bounceHeight = 0.3f;
+    public Transform model;
+    public float bounceHeight = 0.25f;
     public float bounceSpeed = 6f;
 
     [Header("Rotation")]
@@ -44,8 +44,9 @@ public class SlimeController : MonoBehaviour
         currentHP = maxHP;
 
         rb = GetComponent<Rigidbody>();
+
+        rb.useGravity = true;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
-        rb.useGravity = true; // เปิด gravity แล้ว
         rb.interpolation = RigidbodyInterpolation.Interpolate;
 
         PickRandomDirection();
@@ -88,11 +89,12 @@ public class SlimeController : MonoBehaviour
             speed = moveSpeed;
         }
 
-        // smooth movement
+        // smooth direction
         smoothDir = Vector3.Lerp(smoothDir, targetDir, 6f * Time.fixedDeltaTime);
 
+        // เดินตามพื้นจริง
         Vector3 velocity = smoothDir * speed;
-        velocity.y = rb.linearVelocity.y; // เก็บ gravity ไว้
+        velocity.y = rb.linearVelocity.y;
         rb.linearVelocity = velocity;
 
         // bounce เฉพาะ model
@@ -124,7 +126,6 @@ public class SlimeController : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHP -= damage;
-        Debug.Log("Slime HP: " + currentHP);
 
         if (currentHP <= 0)
             Die();
@@ -157,4 +158,4 @@ public class SlimeController : MonoBehaviour
         PickRandomDirection();
         timer = 0f;
     }
-}
+}   
