@@ -6,6 +6,9 @@ public class Door : MonoBehaviour
     public float speed = 2f;
     private bool open = false;
 
+    
+
+
     void OnCollisionEnter(Collision collision)
     {
 

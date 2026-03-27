@@ -10,6 +10,7 @@ public class TargetSwitch : MonoBehaviour
     public Material newVisualMaterial;
     public PhysicsMaterial newPhysicMaterial;
     public GameObject cube;
+    public Door door;
 
 
     void OnCollisionEnter(Collision collision)
@@ -32,10 +33,11 @@ public class TargetSwitch : MonoBehaviour
             floorCollider.sharedMaterial = newPhysicMaterial;
             floorRenderer.material = newVisualMaterial;
         }
+
     }
 
     
-
+    
 
     void Update()
     {
