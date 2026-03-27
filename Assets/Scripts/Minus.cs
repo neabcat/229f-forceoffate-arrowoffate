@@ -35,15 +35,14 @@ public class Minus : MonoBehaviour
             Debug.Log("Magnus");
 
             rb.isKinematic = true;
-
             StartCoroutine(MoveUp());
         }
 
-        else if (collision.gameObject.CompareTag("Target2"))
+        else if (gameObject.CompareTag("Target2"))
         {
             Debug.Log("-*-");
-
             isTake = true;
+
         }
     }
 
