@@ -8,6 +8,7 @@ public class Door : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+
         if (collision.gameObject.CompareTag("Swicth"))
         {
             open = true;

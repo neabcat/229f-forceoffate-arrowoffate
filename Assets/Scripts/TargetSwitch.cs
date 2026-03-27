@@ -1,14 +1,15 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class TargetSwitch : MonoBehaviour
 {
+    [Header("Floor & Physics")]
     public Collider floorCollider;
     public Renderer floorRenderer;
     public Material newVisualMaterial;
     public PhysicsMaterial newPhysicMaterial;
     public GameObject cube;
-
 
 
     void OnCollisionEnter(Collision collision)
@@ -32,6 +33,9 @@ public class TargetSwitch : MonoBehaviour
             floorRenderer.material = newVisualMaterial;
         }
     }
+
+    
+
 
     void Update()
     {

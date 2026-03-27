@@ -1,59 +1,70 @@
+using System.Collections;
 using UnityEngine;
 
 public class InteractUIPuzzle : MonoBehaviour
 {
-    public Renderer[] blocks;   
-    public Material[] colors;   
-    public int[] answer = { 0, 1, 2 };
-    Material[] original;
+    [Header("Puzzle Blocks")]
+    public Renderer[] blocks;              
+    public Material[] colors;              
+    public int[] answer = { 0, 1, 2 };     
 
-    bool canInteract = false;
-    int i = 0;
-    void OnTriggerEnter(Collider other)
-    {
-        canInteract = true;
-    }
+    [Header("Door")]
+    public GameObject door;
+    public float doorSpeed = 2f;
+    public float doorMoveDistance = 2f;
+
+    private Material[] original;
+    private int[] currentState;
+    private bool isPlaying = false;
+    private bool doorOpened = false;
 
     void Start()
     {
         original = new Material[blocks.Length];
-        for (int j = 0; j < blocks.Length; j++)
+        currentState = new int[blocks.Length];
+
+        for (int i = 0; i < blocks.Length; i++)
         {
-            blocks[j].material = new Material(blocks[j].material);
-            original[j] = blocks[j].material;
+            blocks[i].material = new Material(blocks[i].material);
+            original[i] = blocks[i].material;
+            currentState[i] = -1; 
         }
     }
 
     void Update()
     {
-       
-        if (canInteract  && Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && !isPlaying && !doorOpened)
         {
-            CancelInvoke();
-            i = 0;
-            Invoke("Next", 0f);
-            
+            StartCoroutine(ShowSequence());
         }
     }
 
-
-    void Next()
+    IEnumerator ShowSequence()
     {
-        if (i >= answer.Length)
+        isPlaying = true;
+
+        for (int i = 0; i < answer.Length; i++)
         {
-            return;
+            blocks[i].material = colors[answer[i]];
+            yield return new WaitForSeconds(0.5f);
+
+            RestoreBlock(i);
+            yield return new WaitForSeconds(0.2f);
         }
-        blocks[i].material = colors[answer[i]];
-        Invoke("Hide", 0.5f);
+
+        isPlaying = false;
     }
 
-    void Hide()
+    void RestoreBlock(int index)
     {
-        blocks[i].material = original[i];
-        i++;
-        if (i < answer.Length)
-        {
-          Invoke("Next", 1f);
-        }
+        if (currentState[index] == -1)
+            blocks[index].material = original[index];
+        else
+            blocks[index].material = colors[currentState[index]];
     }
+
+    
+
+
+
 }
