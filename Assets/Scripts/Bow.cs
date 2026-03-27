@@ -22,18 +22,28 @@ public class Bow : MonoBehaviour
     [Header("--- String Return ---")]
     public float stringReturnSpeed = 10f;
 
+    [Header("--- Bow Sounds ---")]
+    public AudioClip[] shootClips;
+    public UnityEngine.Audio.AudioMixerGroup sfxMixerGroup;
+    private AudioSource audioSource;
+
     private float chargeTime = 0f;
     private bool isCharging = false;
     private bool hasFired = false;
     private GameObject nockArrow;
     private float fireCooldown = 0f;
 
-
-    private Camera cam; // 🔥 cache camera
+    private Camera cam;
 
     void Awake()
     {
         cam = Camera.main;
+
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 0f;
+        audioSource.outputAudioMixerGroup = sfxMixerGroup;
+        
     }
 
     void Update()
@@ -45,7 +55,7 @@ public class Bow : MonoBehaviour
     void LateUpdate()
     {
         HandleInput();
-        UpdateString(); 
+        UpdateString();
         UpdateNockArrow();
     }
 
@@ -83,7 +93,6 @@ public class Bow : MonoBehaviour
             rb.useGravity = false;
         }
 
-        // ส่ง Bow collider ไปให้ Arrow ignore
         Collider bowCol = GetComponent<Collider>();
         Arrow arrowScript = nockArrow.GetComponent<Arrow>();
         if (bowCol != null && arrowScript != null)
@@ -120,10 +129,17 @@ public class Bow : MonoBehaviour
             rb.linearVelocity = dir * force;
         }
 
-        // หน่วง 0.1 วิก่อนเปิด Collider ให้ธนูพ้น Bow ก่อน
         Arrow arrowScript = arrow.GetComponent<Arrow>();
         if (arrowScript != null)
             arrowScript.EnableColliderDelayed(0.1f);
+
+        // ── เพิ่ม ────────────────────────────────────────────────
+        if (shootClips != null && shootClips.Length > 0)
+        {
+            AudioClip clip = shootClips[Random.Range(0, shootClips.Length)];
+            audioSource.PlayOneShot(clip);
+        }
+        // ─────────────────────────────────────────────────────────
     }
 
     void UpdateString()
@@ -143,7 +159,6 @@ public class Bow : MonoBehaviour
         float t = Mathf.Clamp01(chargeTime / maxChargeTime);
         Vector3 targetPos = Vector3.Lerp(stringRestPoint.position, stringPullPoint.position, t);
 
-        // 🔥 เปลี่ยน SmoothDamp → Lerp (ลื่นกว่า)
         stringBone.position = Vector3.Lerp(
             stringBone.position,
             targetPos,

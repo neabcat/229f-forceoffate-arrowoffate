@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
@@ -16,6 +16,16 @@ public class Player : MonoBehaviour
     public float mouseSensitivity = 2f;
     public float maxLookAngle = 80f;
 
+    [Header("Footstep Sounds")]
+    public AudioClip[] footstepClips;       
+    public float footstepInterval = 0.45f;  
+    public float sprintStepInterval = 0.3f; 
+    public UnityEngine.Audio.AudioMixerGroup sfxMixerGroup; 
+
+
+    private AudioSource audioSource;
+    private float footstepTimer = 0f;
+
     private Rigidbody rb;
     private float xRotation = 0f;
     private bool isGrounded = false;
@@ -26,7 +36,6 @@ public class Player : MonoBehaviour
 
     public DeathMenuUI deathMenu;
     private bool isDead = false;
-
 
     void Start()
     {
@@ -39,6 +48,11 @@ public class Player : MonoBehaviour
         moveAction = InputSystem.actions.FindAction("Move");
         jumpAction = InputSystem.actions.FindAction("Jump");
         sprintAction = InputSystem.actions.FindAction("Sprint");
+
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 0f;
+        audioSource.outputAudioMixerGroup = sfxMixerGroup;
     }
 
     void Update()
@@ -53,18 +67,42 @@ public class Player : MonoBehaviour
         if (isDead) return;
         HandleMovement();
         ApplyGravity();
+
+        HandleFootsteps();
     }
 
+    void HandleFootsteps()
+    {
+        if (footstepClips == null || footstepClips.Length == 0) return;
+
+        Vector2 input = moveAction.ReadValue<Vector2>();
+        bool isMoving = input.magnitude > 0.1f && isGrounded;
+
+        if (isMoving)
+        {
+            bool sprinting = sprintAction.IsPressed();
+            float interval = sprinting ? sprintStepInterval : footstepInterval;
+
+            footstepTimer -= Time.fixedDeltaTime;
+            if (footstepTimer <= 0f)
+            {
+                AudioClip clip = footstepClips[Random.Range(0, footstepClips.Length)];
+                audioSource.PlayOneShot(clip);
+                footstepTimer = interval;
+            }
+        }
+        else
+        {
+            footstepTimer = 0f;
+        }
+    }
 
     void HandleMouseLook()
     {
         Vector2 mouseDelta = Mouse.current.delta.ReadValue();
-
         transform.Rotate(Vector3.up * mouseDelta.x * mouseSensitivity * Time.deltaTime * 100f);
-
         xRotation -= mouseDelta.y * mouseSensitivity * Time.deltaTime * 100f;
         xRotation = Mathf.Clamp(xRotation, -maxLookAngle, maxLookAngle);
-
         cameraHolder.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
     }
 
@@ -82,11 +120,9 @@ public class Player : MonoBehaviour
         Vector2 input = moveAction.ReadValue<Vector2>();
         bool sprinting = sprintAction.IsPressed();
         float speed = sprinting ? sprintSpeed : moveSpeed;
-
         Vector3 moveDir = (transform.right * input.x + transform.forward * input.y).normalized;
         Vector3 targetVelocity = moveDir * speed;
         targetVelocity.y = rb.linearVelocity.y;
-
         rb.linearVelocity = targetVelocity;
     }
 
@@ -115,15 +151,11 @@ public class Player : MonoBehaviour
     public void Die()
     {
         if (isDead) return;
-
         isDead = true;
         Debug.Log("Player Died!");
-
         rb.linearVelocity = Vector3.zero;
-
         if (deathMenu != null)
             deathMenu.Show();
-
         gameObject.SetActive(false);
     }
 }
