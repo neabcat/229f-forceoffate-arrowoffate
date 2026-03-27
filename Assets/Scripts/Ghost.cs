@@ -16,6 +16,5 @@ public class Ghost : MonoBehaviour
     public void ApplyArrowForce()
     {
         cf.force = new Vector3(0f, 0f, -9f);
-        Debug.Log("Ghost force applied: " + cf.force);
     }
 }

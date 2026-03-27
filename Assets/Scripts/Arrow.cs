@@ -43,7 +43,6 @@ public class Arrow : MonoBehaviour
         if (ghost != null)
         {
             ghost.ApplyArrowForce();
-            Debug.Log("Arrow hit Ghost!");
         }
 
         hasHit = true;
