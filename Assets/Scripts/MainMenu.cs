@@ -7,6 +7,7 @@ public class MainMenu : MonoBehaviour
 
     public void StartGame()
     {
+        Time.timeScale = 1f;
         fader.FadeToSceneByName(gameSceneName);
     }
 
