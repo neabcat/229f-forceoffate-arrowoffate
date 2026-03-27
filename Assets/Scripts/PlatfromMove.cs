@@ -7,6 +7,7 @@ public class PlatfromMove : MonoBehaviour
     public Transform right;
     private int direction = 1;
     public bool isPlatfrom = false;
+    public bool isUpdown = false;
 
     // Update is called once per frame
     void Update()
@@ -31,7 +32,31 @@ public class PlatfromMove : MonoBehaviour
 
             transform.position = pos;
         }
-        
+
+
+
+        if (isUpdown == true)
+        {
+            Vector3 pos = transform.position;
+
+
+            pos.z += direction * speed * Time.deltaTime;
+
+            if (pos.z >= right.position.z)
+            {
+                pos.z = right.position.z;
+                direction = -1;
+            }
+
+            else if (pos.z <= left.position.z)
+            {
+                pos.z = left.position.z;
+                direction = 1;
+            }
+
+            transform.position = pos;
+        }
+
     }
 
     private void OnCollisionEnter(Collision collision)
