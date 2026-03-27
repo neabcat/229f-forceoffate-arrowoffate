@@ -7,8 +7,6 @@ public class Minus : MonoBehaviour
     public float spin;
     public float magnus;
     public bool isTake = false;
-    public float targetY = -35.6f;
-    float speed = 1;
 
     Rigidbody rb;
     public GameObject lift; 
@@ -33,16 +31,15 @@ public class Minus : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             Debug.Log("Magnus");
-
+            lift.SetActive(true);
             rb.isKinematic = true;
-            StartCoroutine(MoveUp());
         }
 
         else if (gameObject.CompareTag("Target2"))
         {
             Debug.Log("-*-");
             isTake = true;
-
+            collision.gameObject.SetActive(false);
         }
     }
 
@@ -60,21 +57,5 @@ public class Minus : MonoBehaviour
         Vector3 magnusForce = magnus * Vector3.Cross(velocity, spin);
 
         rb.AddForce(magnusForce);
-    }
-
-    IEnumerator MoveUp()
-    {
-        Vector3 startPos = lift.transform.position;
-        Vector3 endPos = new Vector3(startPos.x, targetY, startPos.z);
-
-        float t = 0f;
-        while (t < 1f)
-        {
-            t += Time.deltaTime * speed;
-            lift.transform.position = Vector3.Lerp(startPos, endPos, t);
-            yield return null;
-        }
-
-        lift.transform.position = endPos;
     }
 }

@@ -11,6 +11,10 @@ TagManager:
   - Swicth
   - Rock
   - Slime
+  - PlatFrom
+  - PlatFrom1
+  - PlatFrom2
+  - Lift
   layers:
   - Default
   - TransparentFX
