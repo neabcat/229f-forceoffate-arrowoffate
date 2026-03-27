@@ -9,12 +9,29 @@ public class AcherTarget : MonoBehaviour
     public GameObject weight;
     public GameObject Wall;
     public GameObject rock;
+    private bool isMoving = false;
+    private float moveTimer = 0f;
+    private float moveDuration = 15f;
 
     private void Start()
     {
         forceSpin = 0f;
         force = 0f;
         acceleration = 0f;
+    }
+
+    private void Update()
+    {
+        if (isMoving)
+        {
+            moveTimer += Time.deltaTime;
+            rock.transform.Translate(Vector3.down * 2.5f * Time.deltaTime);
+
+            if (moveTimer >= moveDuration)
+            {
+                isMoving = false;
+            }
+        }
     }
 
     void CalculateForce()
@@ -55,13 +72,9 @@ public class AcherTarget : MonoBehaviour
         if (gameObject.CompareTag("Rock"))
         {
             Debug.Log("Can");
-            force = 20;
-            Rigidbody rb = rock.GetComponent<Rigidbody>();
-            rb.AddForce(Vector3.down * force);
-
-            Invoke("StopRock", 15f);
+            isMoving = true;
+            moveTimer = 0f;
         }
-        
     }
 
     private void StopRock()

@@ -26,6 +26,8 @@ public class Bow : MonoBehaviour
     private bool isCharging = false;
     private bool hasFired = false;
     private GameObject nockArrow;
+    private float fireCooldown = 0f;
+
 
     private Camera cam; // 🔥 cache camera
 
@@ -36,6 +38,8 @@ public class Bow : MonoBehaviour
 
     void Update()
     {
+        if (fireCooldown > 0f)
+            fireCooldown -= Time.deltaTime;
     }
 
     void LateUpdate()
@@ -49,7 +53,7 @@ public class Bow : MonoBehaviour
     {
         bool pressing = Mouse.current.leftButton.isPressed;
 
-        if (pressing && !hasFired)
+        if (pressing && !hasFired && fireCooldown <= 0f)
         {
             if (!isCharging && nockArrow == null)
                 SpawnNockArrow();
@@ -99,6 +103,7 @@ public class Bow : MonoBehaviour
 
     void Shoot()
     {
+        fireCooldown = 0.4f;
         float percent = Mathf.Clamp01(chargeTime / maxChargeTime);
         float force = Mathf.Lerp(minForce, maxForce, percent);
 
