@@ -15,6 +15,7 @@ TagManager:
   - PlatFrom1
   - PlatFrom2
   - Lift
+  - Wall
   layers:
   - Default
   - TransparentFX

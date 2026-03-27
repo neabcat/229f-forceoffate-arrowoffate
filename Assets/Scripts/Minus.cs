@@ -7,7 +7,7 @@ public class Minus : MonoBehaviour
     public float spin;
     public float magnus;
     public bool isTake = false;
-
+    public CapsuleCollider ghostBox;
     Rigidbody rb;
     public GameObject lift; 
 
@@ -15,6 +15,7 @@ public class Minus : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        ghostBox.isTrigger = true;
     }
 
     // Update is called once per frame
@@ -34,13 +35,25 @@ public class Minus : MonoBehaviour
             lift.SetActive(true);
             rb.isKinematic = true;
         }
+    }
 
-        else if (gameObject.CompareTag("Target2"))
+    private void OnTriggerEnter(Collider other)
+    {
+        if (gameObject.CompareTag("Target2"))
         {
+            
             Debug.Log("-*-");
             isTake = true;
-            collision.gameObject.SetActive(false);
+            StartCoroutine(GhostTrigger());
         }
+    }
+
+    IEnumerator GhostTrigger()
+    {
+        
+        yield return new WaitForSeconds(0.2f);
+
+        ghostBox.isTrigger = false;
     }
 
     void Magnus()
