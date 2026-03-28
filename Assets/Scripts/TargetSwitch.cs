@@ -12,9 +12,29 @@ public class TargetSwitch : MonoBehaviour
     public GameObject cube;
     public Door door;
 
+    [Header("Hit Sounds")]
+    public AudioClip[] hitClips;
+    public UnityEngine.Audio.AudioMixerGroup sfxMixerGroup;
+    private AudioSource audioSource;
+
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 0f;
+        audioSource.outputAudioMixerGroup = sfxMixerGroup;
+    }
 
     void OnCollisionEnter(Collision collision)
     {
+        if (hitClips != null && hitClips.Length > 0)
+        {
+            AudioClip clip = hitClips[UnityEngine.Random.Range(0, hitClips.Length)];
+            audioSource.PlayOneShot(clip);
+        }
+
         if (collision.gameObject)
         {
             floorCollider.sharedMaterial = newPhysicMaterial;

@@ -32,6 +32,11 @@ public class SlimeController : MonoBehaviour
     private float bounceTimer;
     private bool isChasing = false;
 
+    [Header("Hit Sounds")]
+    public AudioClip[] hitClips;
+    public UnityEngine.Audio.AudioMixerGroup sfxMixerGroup;
+    private AudioSource audioSource;
+
     void Awake()
     {
         GameObject p = GameObject.FindGameObjectWithTag("Player");
@@ -51,6 +56,17 @@ public class SlimeController : MonoBehaviour
 
         PickRandomDirection();
         smoothDir = moveDir;
+
+        // ===== AUDIO SETUP =====
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
+
+        audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 1f;   // 3D sound
+        audioSource.volume = 1f;
+        audioSource.minDistance = 1f;
+        audioSource.maxDistance = 20f;
     }
 
     void FixedUpdate()
@@ -127,13 +143,21 @@ public class SlimeController : MonoBehaviour
     {
         currentHP -= damage;
 
+        PlayHitSound();
+
         if (currentHP <= 0)
             Die();
     }
 
     void Die()
     {
-        Destroy(gameObject);
+        PlayHitSound(); 
+
+        GetComponent<Collider>().enabled = false;
+
+        rb.linearVelocity = Vector3.zero;
+
+        Destroy(gameObject, 0.5f);
     }
 
     void PickRandomDirection()
@@ -157,5 +181,16 @@ public class SlimeController : MonoBehaviour
 
         PickRandomDirection();
         timer = 0f;
+    }
+    void PlayHitSound()
+    {
+        if (hitClips == null || hitClips.Length == 0)
+        {
+            Debug.LogWarning("No hit sound on " + gameObject.name);
+            return;
+        }
+
+        AudioClip clip = hitClips[Random.Range(0, hitClips.Length)];
+        audioSource.PlayOneShot(clip);
     }
 }   

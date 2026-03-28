@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
 
 
     private AudioSource audioSource;
+    public AudioClip[] deathClips;
     private float footstepTimer = 0f;
 
     private Rigidbody rb;
@@ -164,6 +165,11 @@ public class Player : MonoBehaviour
         isDead = true;
         Debug.Log("Player Died!");
         rb.linearVelocity = Vector3.zero;
+        if (deathClips != null && deathClips.Length > 0)
+        {
+            AudioClip clip = deathClips[Random.Range(0, deathClips.Length)];
+            AudioSource.PlayClipAtPoint(clip, transform.position);
+        }
         if (deathMenu != null)
             deathMenu.Show();
         gameObject.SetActive(false);

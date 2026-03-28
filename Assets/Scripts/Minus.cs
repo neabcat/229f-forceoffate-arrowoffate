@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 public class Minus : MonoBehaviour
@@ -9,13 +9,22 @@ public class Minus : MonoBehaviour
     public bool isTake = false;
     public CapsuleCollider ghostBox;
     Rigidbody rb;
-    public GameObject lift; 
+    public GameObject lift;
+
+    public AudioClip triggerClips;
+    public UnityEngine.Audio.AudioMixerGroup sfxMixerGroup;
+    private AudioSource audioSource;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         ghostBox.isTrigger = true;
+
+        audioSource = gameObject.AddComponent<AudioSource>(); // 👈 เพิ่ม
+        audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 0f;
+        audioSource.outputAudioMixerGroup = sfxMixerGroup;
     }
 
     // Update is called once per frame
@@ -44,6 +53,7 @@ public class Minus : MonoBehaviour
             
             Debug.Log("-*-");
             isTake = true;
+
             StartCoroutine(GhostTrigger());
         }
     }
@@ -54,6 +64,9 @@ public class Minus : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
 
         ghostBox.isTrigger = false;
+
+        audioSource.PlayOneShot(triggerClips);
+        
     }
 
     void Magnus()

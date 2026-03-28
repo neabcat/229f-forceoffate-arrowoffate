@@ -13,11 +13,23 @@ public class AcherTarget : MonoBehaviour
     private float moveTimer = 0f;
     private float moveDuration = 15f;
 
+    [Header("Collision Sounds")]
+    public AudioClip[] collisionClips;
+    public UnityEngine.Audio.AudioMixerGroup sfxMixerGroup;
+    private AudioSource audioSource;
+
     private void Start()
     {
         forceSpin = 0f;
         force = 0f;
         acceleration = 0f;
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 0f;
+        audioSource.outputAudioMixerGroup = sfxMixerGroup;
     }
 
     private void Update()
@@ -45,6 +57,12 @@ public class AcherTarget : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         Debug.Log("test");
+
+        if (collisionClips != null && collisionClips.Length > 0)
+        {
+            AudioClip clip = collisionClips[UnityEngine.Random.Range(0, collisionClips.Length)];
+            audioSource.PlayOneShot(clip);
+        }
 
         if (gameObject.CompareTag("Taget1"))
         {
