@@ -35,6 +35,7 @@ public class Player : MonoBehaviour
     private InputAction sprintAction;
 
     public DeathMenuUI deathMenu;
+    public GameObject uiESC;
     private bool isDead = false;
 
     void Start()
@@ -60,6 +61,15 @@ public class Player : MonoBehaviour
         if (isDead) return;
         HandleMouseLook();
         HandleJump();
+
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            uiESC.SetActive(true);
+            Time.timeScale = 0f;
+
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
     }
 
     void FixedUpdate()

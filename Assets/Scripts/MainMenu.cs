@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 using System.Collections;
+using Unity.VectorGraphics;
+using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
@@ -58,6 +60,15 @@ public class MainMenu : MonoBehaviour
     {
         uiAudio.PlayOneShot(back);
         uiOption.SetActive(false);
+        Time.timeScale = 1f;
+        
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
+    public void BacktoMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void Options(float valum)
