@@ -129,7 +129,7 @@ public class Bow : MonoBehaviour
             rb.useGravity = true;
 
             Vector3 dir = GetShootDir();
-            rb.linearVelocity = dir * force;
+            rb.AddForce(dir * force, ForceMode.Impulse);
         }
 
         Arrow arrowScript = arrow.GetComponent<Arrow>();
