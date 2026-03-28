@@ -58,12 +58,21 @@ public class MainMenu : MonoBehaviour
 
     public void Back()
     {
+
         uiAudio.PlayOneShot(back);
         uiOption.SetActive(false);
         Time.timeScale = 1f;
-        
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+
+        if (SceneManager.GetActiveScene().name == "MainMenu")
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
     }
 
     public void BacktoMainMenu()

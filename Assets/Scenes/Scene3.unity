@@ -8706,108 +8706,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7568767200482616836, guid: f947b027811f37040be84c44d90532cc, type: 3}
   m_PrefabInstance: {fileID: 645979909}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &647441175
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 647441179}
-  - component: {fileID: 647441178}
-  - component: {fileID: 647441177}
-  - component: {fileID: 647441176}
-  m_Layer: 5
-  m_Name: Press [R] to Restart
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &647441176
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 647441175}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GraphicRaycaster
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
---- !u!114 &647441177
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 647441175}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
-  m_ReferencePixelsPerUnit: 100
-  m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
-  m_PhysicalUnit: 3
-  m_FallbackScreenDPI: 96
-  m_DefaultSpriteDPI: 96
-  m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
---- !u!223 &647441178
-Canvas:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 647441175}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 0
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 25
-  m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_TargetDisplay: 0
---- !u!224 &647441179
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 647441175}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 887618953}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 89.473, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
 --- !u!1 &649073443
 GameObject:
   m_ObjectHideFlags: 0
@@ -12891,12 +12789,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 887618952}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2.6936088, y: 2.6936088, z: 2.6936088}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 647441179}
+  m_Father: {fileID: 1830944398}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -21281,11 +21179,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "\t\t\tThank For Playing\n\t\t       Game : Arrow of Fate\n\nCreate By
-    \nGroup - Force of Fate\n\nScene 1 - 1670701349 - THIWA JAROONRUNG - No 8\nScene
-    2 - 1670700135 - PONWALAI SEELAKUM - No 1\nScene 3 - 1670701463 - MALINEE BUKONG
-    - No 10 \n\nAssets\n\nUnity Asset Store \n - POLYART_Ancient Village\n - AncientRuins\n
-    -  Little_GhostLP(FREE)\n\nBy Second-year Student\nSchool of Information Technology
-    and Innovation\nBachelor of Science (Games and Interactive Media)"
+    \nGroup - Force of Fate\n\nGI204 Section 229F\n\nScene 1 - 1670701349 - THIWA
+    JAROONRUNG - No 8  \nScene 2 - 1670700135 - PONWALAI SEELAKUM - No 1\nScene 3
+    - 1670701463 - MALINEE BUKONG - No 10 \n\nAssets\n\nUnity Asset Store \n - POLYART_Ancient
+    Village\n - AncientRuins\n -  Little_GhostLP(FREE)\n\nBy Second-year Student\nSchool
+    of Information Technology and Innovation\nBachelor of Science (Games and Interactive
+    Media)"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 71a306618f82c6048841f54c7ce404a2, type: 2}
   m_sharedMaterial: {fileID: -1706863826944157495, guid: 71a306618f82c6048841f54c7ce404a2, type: 2}
@@ -26896,10 +26795,19 @@ PrefabInstance:
       value: QuitToMenu
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1416522839791148306, guid: 523d2293acfd2fe4a98becfcc21fee0f, type: 3}
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 6196971419188924412, guid: 523d2293acfd2fe4a98becfcc21fee0f, type: 3}
+      insertIndex: 3
+      addedObject: {fileID: 887618953}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 523d2293acfd2fe4a98becfcc21fee0f, type: 3}
+--- !u!224 &1830944398 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6196971419188924412, guid: 523d2293acfd2fe4a98becfcc21fee0f, type: 3}
+  m_PrefabInstance: {fileID: 1830944397}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1839199960
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31457,7 +31365,6 @@ SceneRoots:
   - {fileID: 915972490}
   - {fileID: 467961115}
   - {fileID: 1888160171}
-  - {fileID: 647441179}
   - {fileID: 439313502}
   - {fileID: 2015502938}
   - {fileID: 1249694231}

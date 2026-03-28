@@ -490,9 +490,9 @@ RectTransform:
   m_Children:
   - {fileID: 1032882380}
   - {fileID: 337495512}
+  - {fileID: 634709421}
   - {fileID: 1876959208}
   - {fileID: 755224232}
-  - {fileID: 634709421}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -757,15 +757,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MainMenu
   gameSceneName: Scene1
   fader: {fileID: 915143403}
-  uiOption: {fileID: 0}
-  Music: {fileID: 0}
-  SFX: {fileID: 0}
-  mainAuio: {fileID: 0}
-  uiAudio: {fileID: 0}
-  start: {fileID: 0}
-  option: {fileID: 0}
-  back: {fileID: 0}
-  quit: {fileID: 0}
+  uiOption: {fileID: 510006648}
+  Music: {fileID: 1116575300}
+  SFX: {fileID: 1995629626}
+  mainAuio: {fileID: 24100000, guid: ca08e5c15a814fe409a4b84d31ffeac9, type: 2}
+  uiAudio: {fileID: 1418773053}
+  start: {fileID: 8300000, guid: 2f6d12d522dc8ff4e9d892041cf05694, type: 3}
+  option: {fileID: 8300000, guid: 4f8d7a11abc64684abc0a3257addab88, type: 3}
+  back: {fileID: 8300000, guid: 4f8d7a11abc64684abc0a3257addab88, type: 3}
+  quit: {fileID: 8300000, guid: 4f8d7a11abc64684abc0a3257addab88, type: 3}
 --- !u!114 &337495514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1697,7 +1697,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 634709420}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a96a625411b2aa94b8c5caad4ed2ec07, type: 3}
   m_Name: 
@@ -1720,7 +1720,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 634709420}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 6367232286639356694, guid: ca08e5c15a814fe409a4b84d31ffeac9, type: 2}
   m_audioClip: {fileID: 0}
