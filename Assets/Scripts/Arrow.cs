@@ -31,14 +31,12 @@ public class Arrow : MonoBehaviour
     {
         if (hasHit) return;
 
-        // ยิง Slime
         SlimeController slime = collision.gameObject.GetComponent<SlimeController>();
         if (slime != null)
         {
             slime.TakeDamage(damage);
         }
 
-        // เช็ค Ghost ก่อนเสมอ
         Ghost ghost = collision.gameObject.GetComponent<Ghost>();
         if (ghost != null)
         {
