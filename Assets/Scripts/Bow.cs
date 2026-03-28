@@ -136,13 +136,11 @@ public class Bow : MonoBehaviour
         if (arrowScript != null)
             arrowScript.EnableColliderDelayed(0.1f);
 
-        // ── เพิ่ม ────────────────────────────────────────────────
         if (shootClips != null && shootClips.Length > 0)
         {
             AudioClip clip = shootClips[Random.Range(0, shootClips.Length)];
             audioSource.PlayOneShot(clip);
         }
-        // ─────────────────────────────────────────────────────────
     }
 
     void UpdateString()
