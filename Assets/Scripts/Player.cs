@@ -13,15 +13,14 @@ public class Player : MonoBehaviour
 
     [Header("Mouse Look")]
     public Transform cameraHolder;
-    public float mouseSensitivity = 2f;
+    public float mouseSensitivity = 0.15f;
     public float maxLookAngle = 80f;
 
     [Header("Footstep Sounds")]
-    public AudioClip[] footstepClips;       
-    public float footstepInterval = 0.45f;  
-    public float sprintStepInterval = 0.3f; 
-    public UnityEngine.Audio.AudioMixerGroup sfxMixerGroup; 
-
+    public AudioClip[] footstepClips;
+    public float footstepInterval = 0.45f;
+    public float sprintStepInterval = 0.3f;
+    public UnityEngine.Audio.AudioMixerGroup sfxMixerGroup;
 
     private AudioSource audioSource;
     public AudioClip[] deathClips;
@@ -38,6 +37,8 @@ public class Player : MonoBehaviour
     public DeathMenuUI deathMenu;
     public GameObject uiESC;
     private bool isDead = false;
+    private Vector2 smoothedDelta;
+
 
     void Start()
     {
@@ -67,10 +68,8 @@ public class Player : MonoBehaviour
         {
             uiESC.SetActive(true);
             Time.timeScale = 0f;
-
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-
         }
     }
 
@@ -79,8 +78,22 @@ public class Player : MonoBehaviour
         if (isDead) return;
         HandleMovement();
         ApplyGravity();
-
         HandleFootsteps();
+    }
+
+    void HandleMouseLook()
+    {
+        Vector2 mouseDelta = Mouse.current.delta.ReadValue();
+
+        mouseDelta.x = Mathf.Clamp(mouseDelta.x, -50f, 50f);
+        mouseDelta.y = Mathf.Clamp(mouseDelta.y, -50f, 50f);
+
+        smoothedDelta = Vector2.Lerp(smoothedDelta, mouseDelta, 0.5f);
+
+        transform.Rotate(Vector3.up * smoothedDelta.x * mouseSensitivity);
+        xRotation -= smoothedDelta.y * mouseSensitivity;
+        xRotation = Mathf.Clamp(xRotation, -maxLookAngle, maxLookAngle);
+        cameraHolder.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
     }
 
     void HandleFootsteps()
@@ -107,15 +120,6 @@ public class Player : MonoBehaviour
         {
             footstepTimer = 0f;
         }
-    }
-
-    void HandleMouseLook()
-    {
-        Vector2 mouseDelta = Mouse.current.delta.ReadValue();
-        transform.Rotate(Vector3.up * mouseDelta.x * mouseSensitivity * Time.deltaTime * 100f);
-        xRotation -= mouseDelta.y * mouseSensitivity * Time.deltaTime * 100f;
-        xRotation = Mathf.Clamp(xRotation, -maxLookAngle, maxLookAngle);
-        cameraHolder.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
     }
 
     void HandleJump()
