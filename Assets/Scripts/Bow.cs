@@ -61,6 +61,9 @@ public class Bow : MonoBehaviour
 
     void HandleInput()
     {
+
+        if (Cursor.lockState != CursorLockMode.Locked)
+            return;
         bool pressing = Mouse.current.leftButton.isPressed;
 
         if (pressing && !hasFired && fireCooldown <= 0f)
