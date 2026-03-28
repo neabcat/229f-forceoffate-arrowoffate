@@ -7,6 +7,7 @@ public class Credit : MonoBehaviour
 
     public AudioClip creditSound;
     private AudioSource audioSource;
+    private bool hasTriggered = false;
 
     void Start()
     {
@@ -16,9 +17,12 @@ public class Credit : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (hasTriggered) return; 
+        hasTriggered = true;
+
         UI.SetActive(true);
         UIcredit.Rolling();
-
-        audioSource.PlayOneShot(creditSound); 
+            
+        audioSource.PlayOneShot(creditSound);
     }
 }
